@@ -19,7 +19,7 @@ const kbSchema = new Schema({
   },
   avatar: {
     type: String,
-    default: '/icon/logo.svg'
+    default: '/icon/kbIcon.png'
   },
   name: {
     type: String,

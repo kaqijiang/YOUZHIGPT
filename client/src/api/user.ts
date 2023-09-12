@@ -10,11 +10,9 @@ export const sendAuthCode = (data: {
   username: string;
   type: `${UserAuthTypeEnum}`;
   googleToken: string;
-}) => POST(`/plusApi/user/account/sendCode`, data);
+}) => POST('/user/account/sendAuthCode', data);
 
 export const getTokenLogin = () => GET<UserType>('/user/account/tokenLogin');
-export const gitLogin = (params: { code: string; inviterId?: string }) =>
-  GET<ResLogin>('/plusApi/user/account/gitLogin', params);
 
 export const postRegister = ({
   username,
@@ -27,7 +25,7 @@ export const postRegister = ({
   password: string;
   inviterId?: string;
 }) =>
-  POST<ResLogin>(`/plusApi/user/account/register`, {
+  POST<ResLogin>(`/user/account/register`, {
     username,
     code,
     inviterId,
@@ -43,7 +41,7 @@ export const postFindPassword = ({
   code: string;
   password: string;
 }) =>
-  POST<ResLogin>(`/plusApi/user/account/updatePasswordByCode`, {
+  POST<ResLogin>(`/user/account/updatePasswordByCode`, {
     username,
     code,
     password: createHashPassword(password)
@@ -74,13 +72,13 @@ export const getPayCode = (amount: number) =>
   GET<{
     codeUrl: string;
     payId: string;
-  }>(`/plusApi/user/pay/getPayCode`, { amount });
+  }>(`/user/account/getPayCode`, { amount });
 
 export const checkPayResult = (payId: string) =>
-  GET<number>(`/plusApi/user/pay/checkPayResult`, { payId }).then(() => {
+  GET<number>(`/user/account/checkPayResult`, { payId }).then(() => {
     try {
       GET('/user/account/paySuccess');
-    } catch (error) {}
+    } catch (error) { }
     return 'success';
   });
 

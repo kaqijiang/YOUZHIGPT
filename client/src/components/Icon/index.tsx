@@ -83,7 +83,9 @@ const map = {
   retryLight: require('./icons/light/retry.svg').default,
   rightArrowLight: require('./icons/light/rightArrow.svg').default,
   searchLight: require('./icons/light/search.svg').default,
+  assistance: require('./icons/assistance.svg').default,
   plusFill: require('./icons/fill/plus.svg').default
+
 };
 
 export type IconName = keyof typeof map;

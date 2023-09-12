@@ -17,7 +17,7 @@ type State = {
   isPc?: boolean;
   initIsPc(val: boolean): void;
   gitStar: number;
-  loadGitStar: () => Promise<void>;
+  // loadGitStar: () => Promise<void>;
 };
 
 export const useGlobalStore = create<State>()(
@@ -57,17 +57,18 @@ export const useGlobalStore = create<State>()(
           set((state) => {
             state.isPc = val;
           });
-        },
-        gitStar: 3700,
-        async loadGitStar() {
-          try {
-            const { data: git } = await axios.get('https://api.github.com/repos/labring/FastGPT');
-
-            set((state) => {
-              state.gitStar = git.stargazers_count;
-            });
-          } catch (error) {}
         }
+        // ,
+        // gitStar: 3700,
+        // async loadGitStar() {
+        //   try {
+        //     const { data: git } = await axios.get('https://api.github.com/repos/labring/YOUZHI');
+
+        //     set((state) => {
+        //       state.gitStar = git.stargazers_count;
+        //     });
+        //   } catch (error) { }
+        // }
       })),
       {
         name: 'globalStore',

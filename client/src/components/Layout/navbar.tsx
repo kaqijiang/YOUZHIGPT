@@ -50,14 +50,14 @@ const Navbar = ({ unread }: { unread: number }) => {
       },
       ...(feConfigs?.show_appStore
         ? [
-            {
-              label: t('navbar.Store'),
-              icon: 'appStoreLight',
-              activeIcon: 'appStoreFill',
-              link: '/appStore',
-              activeLink: ['/appStore']
-            }
-          ]
+          {
+            label: t('navbar.Store'),
+            icon: 'appStoreLight',
+            activeIcon: 'appStoreFill',
+            link: '/appStore',
+            activeLink: ['/appStore']
+          }
+        ]
         : []),
       {
         label: t('navbar.Account'),
@@ -122,18 +122,18 @@ const Navbar = ({ unread }: { unread: number }) => {
             {...itemStyles}
             {...(item.activeLink.includes(router.pathname)
               ? {
-                  color: 'myBlue.700',
-                  bg: 'white !important',
-                  boxShadow: '1px 1px 10px rgba(0,0,0,0.2)'
-                }
+                color: 'myBlue.700',
+                bg: 'white !important',
+                boxShadow: '1px 1px 10px rgba(0,0,0,0.2)'
+              }
               : {
-                  color: 'myGray.500',
-                  backgroundColor: 'transparent'
-                })}
+                color: 'myGray.500',
+                backgroundColor: 'transparent'
+              })}
             {...(item.link !== router.asPath
               ? {
-                  onClick: () => router.push(item.link)
-                }
+                onClick: () => router.push(item.link)
+              }
               : {})}
           >
             <MyIcon
@@ -167,26 +167,29 @@ const Navbar = ({ unread }: { unread: number }) => {
           </Link>
         </Box>
       )}
-      {feConfigs?.show_doc && (
-        <MyTooltip label={t('home.Docs')} placement={'right-end'}>
-          <Box
-            {...itemStyles}
-            mb={0}
-            color={'#9096a5'}
-            onClick={() => {
-              window.open(`https://doc.fastgpt.run/docs/intro`);
-            }}
-          >
-            <MyIcon name={'courseLight'} width={'26px'} height={'26px'} />
+      {(
+
+        <Box
+          {...itemStyles}
+          mb={5}
+          color={'#9096a5'}
+          onClick={() => {
+            window.open(`https://j5qbu9fnwv.feishu.cn/docx/UXsQdoNVpoKePpx5l24cnPQHnah`);
+          }}
+        >
+          <MyIcon name={'assistance'} width={'20px'} height={'20px'} />
+          <Box fontSize={'12px'} transform={'scale(0.9)'} mt={'5px'} lineHeight={1}>
+            关于
           </Box>
-        </MyTooltip>
+        </Box>
+
       )}
-      <Language {...itemStyles} />
+      {/* <Language {...itemStyles} /> 多语言 */}
       {feConfigs?.show_git && (
         <MyTooltip label={`Git Star: ${gitStar}`} placement={'right-end'}>
           <Link
             as={NextLink}
-            href="https://github.com/labring/FastGPT"
+            href="https://github.com/labring/YOUZHI"
             target={'_blank'}
             {...itemStyles}
             mt={0}

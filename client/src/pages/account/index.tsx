@@ -45,17 +45,17 @@ const Account = ({ currentTab }: { currentTab: `${TabEnum}` }) => {
     },
     ...(feConfigs?.show_userDetail
       ? [
-          {
-            icon: 'promotionLight',
-            label: t('user.Promotion Record'),
-            id: TabEnum.promotion
-          },
-          {
-            icon: 'payRecordLight',
-            label: t('user.Recharge Record'),
-            id: TabEnum.pay
-          }
-        ]
+        {
+          icon: 'promotionLight',
+          label: t('user.Promotion Record'),
+          id: TabEnum.promotion
+        },
+        {
+          icon: 'payRecordLight',
+          label: t('user.Recharge Record'),
+          id: TabEnum.pay
+        }
+      ]
       : []),
     {
       icon: 'informLight',

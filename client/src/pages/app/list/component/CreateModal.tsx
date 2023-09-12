@@ -39,7 +39,7 @@ const CreateModal = ({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
   const { isPc } = useGlobalStore();
   const { register, setValue, getValues, handleSubmit } = useForm<FormType>({
     defaultValues: {
-      avatar: '/icon/logo.svg',
+      avatar: '/icon/application.png',
       name: '',
       templateId: appTemplates[0].id
     }
@@ -136,13 +136,13 @@ const CreateModal = ({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
               boxShadow={'sm'}
               {...(getValues('templateId') === item.id
                 ? {
-                    bg: 'myWhite.600'
-                  }
+                  bg: 'myWhite.600'
+                }
                 : {
-                    _hover: {
-                      boxShadow: 'md'
-                    }
-                  })}
+                  _hover: {
+                    boxShadow: 'md'
+                  }
+                })}
               onClick={() => {
                 setValue('templateId', item.id);
                 setRefresh((state) => !state);

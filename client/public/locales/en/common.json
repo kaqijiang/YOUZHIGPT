@@ -94,7 +94,7 @@
   "dataset": {
     "Confirm to delete the data": "Confirm to delete the data?",
     "Export": "Export",
-    "Queue Desc": "This data refers to the current amount of training for the entire system. FastGPT uses queued training, and if you have too much data to train, you may need to wait for a while",
+    "Queue Desc": "This data refers to the current amount of training for the entire system. YOUZHI uses queued training, and if you have too much data to train, you may need to wait for a while",
     "System Data Queue": "Data Queue"
   },
   "file": {
@@ -123,7 +123,7 @@
     "Advanced Settings Desc": "",
     "Choice Debug": "Convenient Debugging",
     "Choice Debug Desc": "Search testing, reference modification, full conversation preview and many other debugging ways",
-    "Choice Desc": "FastGPT follows the Apache License 2.0 open source protocol",
+    "Choice Desc": "YOUZHI follows the Apache License 2.0 open source protocol",
     "Choice Extension": "Infinite Extension",
     "Choice Extension Desc": "HTTP based extension, easy to achieve custom functions",
     "Choice Fast": "Fast",
@@ -140,12 +140,12 @@
     "Dateset": "",
     "Dateset Desc": "",
     "Docs": "Docs",
-    "FastGPT Ability": "{{title}} Ability",
-    "FastGPT Desc": "{{title}} is a knowledgebase question answering system based on LLM large language model, which provides out-of-the-box data processing, model invocation and other capabilities. At the same time, workflow orchestration can be performed through Flow visualization to achieve complex Q&A scenarios!",
+    "YOUZHI Ability": "{{title}} Ability",
+    "YOUZHI Desc": "{{title}} is a knowledgebase question answering system based on LLM large language model, which provides out-of-the-box data processing, model invocation and other capabilities. At the same time, workflow orchestration can be performed through Flow visualization to achieve complex Q&A scenarios!",
     "Features": "Features",
     "Footer Developer": "Developer",
     "Footer Docs": "Docs",
-    "Footer FastGPT Cloud": "{{title}} Cloud",
+    "Footer YOUZHI Cloud": "{{title}} Cloud",
     "Footer Feedback": "Feedback",
     "Footer Git": "Code",
     "Footer Product": "Product",
@@ -157,7 +157,7 @@
     "Quickly build AI question and answer library": "Quickly build AI question and answer library",
     "Start Now": "Start Now",
     "Visual AI orchestration": "Visual AI orchestration",
-    "Why FastGPT": "Why {{title}}",
+    "Why YOUZHI": "Why {{title}}",
     "desc": "AI knowledge base question and answer platform based on LLM large model",
     "slogan": "Let the AI know more about you"
   },

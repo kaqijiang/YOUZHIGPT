@@ -100,17 +100,13 @@ const VariableLabel = ({
 );
 
 const Empty = () => {
-  const { data: chatProblem } = useMarkdown({ url: '/chatProblem.md' });
   const { data: versionIntro } = useMarkdown({ url: '/versionIntro.md' });
 
   return (
     <Box pt={6} w={'85%'} maxW={'600px'} m={'auto'} alignItems={'center'} justifyContent={'center'}>
       {/* version intro */}
-      <Card p={4} mb={10} minH={'200px'}>
+      <Card p={4} pl={20} mb={10} minH={'50px'} >
         <Markdown source={versionIntro} />
-      </Card>
-      <Card p={4} minH={'600px'}>
-        <Markdown source={chatProblem} />
       </Card>
     </Box>
   );
@@ -251,14 +247,14 @@ const ChatBox = (
             ...item,
             ...(text
               ? {
-                  value: item.value + text
-                }
+                value: item.value + text
+              }
               : {}),
             ...(status && name
               ? {
-                  status,
-                  moduleName: name
-                }
+                status,
+                moduleName: name
+              }
               : {})
           };
         })
@@ -792,27 +788,27 @@ const ChatBox = (
                               {...controlIconStyle}
                               {...(!!item.userFeedback
                                 ? {
-                                    color: 'white',
-                                    bg: '#FC9663',
-                                    fontWeight: 'bold',
-                                    onClick: () => {
-                                      if (!item.dataId) return;
-                                      setChatHistory((state) =>
-                                        state.map((chatItem) =>
-                                          chatItem.dataId === item.dataId
-                                            ? { ...chatItem, userFeedback: undefined }
-                                            : chatItem
-                                        )
-                                      );
-                                      try {
-                                        userUpdateChatFeedback({ chatItemId: item.dataId });
-                                      } catch (error) {}
-                                    }
+                                  color: 'white',
+                                  bg: '#FC9663',
+                                  fontWeight: 'bold',
+                                  onClick: () => {
+                                    if (!item.dataId) return;
+                                    setChatHistory((state) =>
+                                      state.map((chatItem) =>
+                                        chatItem.dataId === item.dataId
+                                          ? { ...chatItem, userFeedback: undefined }
+                                          : chatItem
+                                      )
+                                    );
+                                    try {
+                                      userUpdateChatFeedback({ chatItemId: item.dataId });
+                                    } catch (error) { }
                                   }
+                                }
                                 : {
-                                    _hover: { color: '#FB7C3C' },
-                                    onClick: () => setFeedbackId(item.dataId)
-                                  })}
+                                  _hover: { color: '#FB7C3C' },
+                                  onClick: () => setFeedbackId(item.dataId)
+                                })}
                               name={'badLight'}
                             />
                           </MyTooltip>
@@ -1031,9 +1027,9 @@ const ChatBox = (
               state.map((chatItem) =>
                 chatItem.dataId === adminMarkData.chatItemId
                   ? {
-                      ...chatItem,
-                      adminFeedback
-                    }
+                    ...chatItem,
+                    adminFeedback
+                  }
                   : chatItem
               )
             );
@@ -1058,7 +1054,7 @@ const ChatBox = (
                 );
                 setReadFeedbackData(undefined);
               }
-            } catch (error) {}
+            } catch (error) { }
             setAdminMarkData(undefined);
           }}
           kbId={adminMarkData.kbId}
@@ -1082,9 +1078,8 @@ export const useChatBox = () => {
         const historyDom = document.getElementById('history');
         if (!historyDom) return;
         const dom = Array.from(historyDom.children).map((child, i) => {
-          const avatar = `<img src="${
-            child.querySelector<HTMLImageElement>('.avatar')?.src
-          }" alt="" />`;
+          const avatar = `<img src="${child.querySelector<HTMLImageElement>('.avatar')?.src
+            }" alt="" />`;
 
           const chatContent = child.querySelector<HTMLDivElement>('.markdown');
 

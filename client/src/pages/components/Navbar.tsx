@@ -19,30 +19,7 @@ const Navbar = () => {
   } = useDisclosure();
   const { isOpen: isOpenMenu, onOpen: onOpenMenu, onClose: onCloseMenu } = useDisclosure();
   const { isPc } = useGlobalStore();
-  const menuList = [
-    ...(feConfigs?.show_contact
-      ? [
-          {
-            label: t('home.Community'),
-            key: 'community',
-            onClick: () => {
-              onOpenCommunity();
-            }
-          }
-        ]
-      : []),
-    ...(feConfigs?.show_doc
-      ? [
-          {
-            label: t('home.Docs'),
-            key: 'docs',
-            onClick: () => {
-              window.open('https://doc.fastgpt.run/docs/intro');
-            }
-          }
-        ]
-      : [])
-  ];
+  const menuList: any[] = [];
   const bgOpacity = useMemo(() => {
     const rate = scrollTop / 120;
     if (rate > 0.7) {
@@ -88,7 +65,6 @@ const Navbar = () => {
       h={isOpenMenu ? '100vh' : 'auto'}
     >
       <Flex maxW={'1300px'} m={'auto'} alignItems={'center'}>
-        <Avatar src="/icon/logo.svg" w={['30px', '38px']} />
         <Box
           className="textlg"
           fontSize={['3xl', '4xl']}
@@ -101,14 +77,14 @@ const Navbar = () => {
         <Box flex={1} />
         {isPc ? (
           <>
-            {menuList.map((item) => (
+            {/* {menuList.map((item) => (
               <Box key={item.key} {...menuStyles} onClick={item.onClick}>
                 {item.label}
               </Box>
             ))}
             <Box px={4} color={'myGray.500'}>
               |
-            </Box>
+            </Box> */}
             <Box {...menuStyles} onClick={() => router.push('/login')}>
               {t('home.Login')}
             </Box>

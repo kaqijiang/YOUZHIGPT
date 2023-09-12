@@ -44,7 +44,7 @@ const ResponseTags = ({
     };
   }, [responseData]);
 
-  const updateQuote = useCallback(async (quoteId: string, sourceText?: string) => {}, []);
+  const updateQuote = useCallback(async (quoteId: string, sourceText?: string) => { }, []);
 
   const TagStyles: BoxProps = {
     mr: 2,
@@ -87,6 +87,11 @@ const ResponseTags = ({
           {t('chat.Complete Response')}
         </Tag>
       </MyTooltip>
+      {(
+        <Tag colorSchema="blue2" cursor={'default'} {...TagStyles}>
+          以上内容为 AI 生成，不代表开发者立场，请勿删除或修改本标记
+        </Tag>
+      )}
 
       {!!quoteModalData && (
         <QuoteModal

@@ -3,7 +3,7 @@ import type { KbItemType } from '@/types/plugin';
 export const defaultKbDetail: KbItemType = {
   _id: '',
   userId: '',
-  avatar: '/icon/logo.svg',
+  avatar: '/icon/kbIcon.png',
   name: '',
   tags: '',
   vectorModel: {

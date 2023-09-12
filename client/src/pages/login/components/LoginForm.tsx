@@ -64,8 +64,7 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
       lastRoute
     });
     router.replace(
-      `https://github.com/login/oauth/authorize?client_id=${
-        feConfigs?.gitLoginKey
+      `https://github.com/login/oauth/authorize?client_id=${feConfigs?.gitLoginKey
       }&redirect_uri=${`${location.origin}/login/provider`}&scope=user:email%20read:user`,
       '_self'
     );
@@ -79,10 +78,10 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
       <form onSubmit={handleSubmit(onclickLogin)}>
         <FormControl mt={8} isInvalid={!!errors.username}>
           <Input
-            placeholder="邮箱/手机号/用户名"
+            placeholder="邮箱/用户名"
             size={['md', 'lg']}
             {...register('username', {
-              required: '邮箱/手机号/用户名不能为空'
+              required: '邮箱/用户名不能为空'
             })}
           ></Input>
           <FormErrorMessage position={'absolute'} fontSize="xs">
@@ -136,19 +135,7 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
         >
           登录
         </Button>
-        {feConfigs?.show_register && (
-          <>
-            <Flex mt={10} justifyContent={'center'} alignItems={'center'}>
-              <MyIcon
-                name="gitFill"
-                w={'34px'}
-                cursor={'pointer'}
-                color={'myGray.800'}
-                onClick={onclickGit}
-              />
-            </Flex>
-          </>
-        )}
+
       </form>
     </>
   );

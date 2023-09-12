@@ -6,7 +6,6 @@ import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { getErrText } from '@/utils/tools';
 import { useTranslation } from 'react-i18next';
-import Markdown from '@/components/Markdown';
 import MyModal from '@/components/MyModal';
 
 const PayModal = ({ onClose }: { onClose: () => void }) => {
@@ -16,7 +15,9 @@ const PayModal = ({ onClose }: { onClose: () => void }) => {
   const [inputVal, setInputVal] = useState<number | ''>('');
   const [loading, setLoading] = useState(false);
   const [payId, setPayId] = useState('');
-
+  const contactMe = () => {
+    window.open('https://bento.me/aijie', '_blank');
+  };
   const handleClickPay = useCallback(async () => {
     if (!inputVal || inputVal <= 0 || isNaN(+inputVal)) return;
     setLoading(true);
@@ -96,16 +97,16 @@ const PayModal = ({ onClose }: { onClose: () => void }) => {
                 }}
               ></Input>
             </Box>
-            <Markdown
-              source={`
-| 计费项 | 价格: 元/ 1K tokens(包含上下文)|
-| --- | --- |
-| 知识库 - 索引 | 0.002 |
-| FastAI4k - 对话 | 0.015 |
-| FastAI16k - 对话 | 0.03 |
-| FastAI-Plus - 对话 | 0.45 |
-| 文件QA拆分 | 0.03 |`}
-            />
+            <Box
+              mb={4}
+              fontSize={'sm'}
+              color={'myBlue.600'}
+              cursor={'pointer'}
+              position={'absolute'}
+              onClick={contactMe}
+            >
+              无法充值，点击联系
+            </Box>
           </>
         )}
         {/* 付费二维码 */}

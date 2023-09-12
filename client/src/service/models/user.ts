@@ -27,7 +27,7 @@ const UserSchema = new Schema({
   },
   balance: {
     type: Number,
-    default: 2 * PRICE_SCALE
+    default: 1 * PRICE_SCALE
   },
   inviterId: {
     // 谁邀请注册的

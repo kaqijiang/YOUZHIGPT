@@ -98,7 +98,7 @@ export const dispatchChatCompletion = async (props: Record<string, any>): Promis
   });
   // console.log(messages);
 
-  // FastGPT temperature range: 1~10
+  // YOUZHI temperature range: 1~10
   temperature = +(modelConstantsData.maxTemperature * (temperature / 10)).toFixed(2);
   temperature = Math.max(temperature, 0.01);
   const chatAPI = getAIChatApi(userOpenaiAccount);
@@ -111,11 +111,11 @@ export const dispatchChatCompletion = async (props: Record<string, any>): Promis
       messages: [
         ...(modelConstantsData.defaultSystem
           ? [
-              {
-                role: ChatCompletionRequestMessageRoleEnum.System,
-                content: modelConstantsData.defaultSystem
-              }
-            ]
+            {
+              role: ChatCompletionRequestMessageRoleEnum.System,
+              content: modelConstantsData.defaultSystem
+            }
+          ]
           : []),
         ...messages
       ],
@@ -208,10 +208,10 @@ function filterQuote({
   const quotePrompt =
     filterQuoteQA.length > 0
       ? `"""${filterQuoteQA
-          .map((item) =>
-            item.a ? `{instruction:"${item.q}",output:"${item.a}"}` : `{instruction:"${item.q}"}`
-          )
-          .join('\n')}"""`
+        .map((item) =>
+          item.a ? `{instruction:"${item.q}",output:"${item.a}"}` : `{instruction:"${item.q}"}`
+        )
+        .join('\n')}"""`
       : '';
 
   return {
@@ -244,28 +244,28 @@ function getChatMessages({
   const messages: ChatItemType[] = [
     ...(systemText
       ? [
-          {
-            obj: ChatRoleEnum.System,
-            value: systemText
-          }
-        ]
+        {
+          obj: ChatRoleEnum.System,
+          value: systemText
+        }
+      ]
       : []),
     ...(quotePrompt
       ? [
-          {
-            obj: ChatRoleEnum.System,
-            value: quotePrompt
-          }
-        ]
+        {
+          obj: ChatRoleEnum.System,
+          value: quotePrompt
+        }
+      ]
       : []),
     ...history,
     ...(limitPrompt
       ? [
-          {
-            obj: ChatRoleEnum.System,
-            value: limitPrompt
-          }
-        ]
+        {
+          obj: ChatRoleEnum.System,
+          value: limitPrompt
+        }
+      ]
       : []),
     {
       obj: ChatRoleEnum.Human,
@@ -379,8 +379,7 @@ async function streamResponse({
 
 function getDefaultPrompt({ hasQuoteOutput }: { hasQuoteOutput?: boolean }) {
   return {
-    quoteGuidePrompt: `三引号引用的内容是我提供给你的知识库，它们拥有最高优先级。instruction 是相关介绍${
-      hasQuoteOutput ? '，output 是预期回答或补充。' : '。'
-    }`
+    quoteGuidePrompt: `三引号引用的内容是我提供给你的知识库，它们拥有最高优先级。instruction 是相关介绍${hasQuoteOutput ? '，output 是预期回答或补充。' : '。'
+      }`
   };
 }

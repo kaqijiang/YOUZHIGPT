@@ -54,7 +54,7 @@ const NodeCard = (props: Props) => {
       {
         icon: 'back',
         label: t('common.Cancel'),
-        onClick: () => {}
+        onClick: () => { }
       }
     ],
     [moduleId, onCopyNode, onDelNode, t]

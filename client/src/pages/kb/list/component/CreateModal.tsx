@@ -25,7 +25,7 @@ const CreateModal = ({ onClose, parentId }: { onClose: () => void; parentId?: st
   const { isPc } = useGlobalStore();
   const { register, setValue, getValues, handleSubmit } = useForm<CreateKbParams>({
     defaultValues: {
-      avatar: '/icon/logo.svg',
+      avatar: '/icon/kbIcon.png',
       name: '',
       tags: [],
       vectorModel: vectorModelList[0].model,

@@ -35,7 +35,7 @@ const Ability = () => {
         fontSize={['22px', '30px']}
         fontWeight={'bold'}
       >
-        {t('home.FastGPT Ability', { title: feConfigs.systemTitle })}
+        {t('home.YOUZHI Ability', { title: feConfigs.systemTitle })}
       </Box>
       <Grid px={[5, 0]} minH={'400px'} gridTemplateColumns={['1fr', `500px 1fr`]} gridGap={6}>
         <Box
