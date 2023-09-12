@@ -72,7 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               objUId: userId,
               type: 'invite',
               // amount 单位为元，需要除以缩放比例，最后乘比例
-              amount: (payOrder.price / PRICE_SCALE) * inviter.promotion.rate * 0.01
+              amount: (payOrder.price / PRICE_SCALE) * inviter.promotionRate * 0.01
             });
           }
           unlockTask(userId);
@@ -87,7 +87,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           await Pay.findByIdAndUpdate(payId, {
             status: 'NOTPAY'
           });
-        } catch (error) {}
+        } catch (error) { }
       }
       return jsonRes(res, {
         code: 500,

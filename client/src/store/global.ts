@@ -58,17 +58,17 @@ export const useGlobalStore = create<State>()(
             state.isPc = val;
           });
         }
-        // ,
-        // gitStar: 3700,
-        // async loadGitStar() {
-        //   try {
-        //     const { data: git } = await axios.get('https://api.github.com/repos/labring/YOUZHI');
+        ,
+        gitStar: 3700,
+        async loadGitStar() {
+          try {
+            const { data: git } = await axios.get('https://api.github.com/repos/labring/YOUZHI');
 
-        //     set((state) => {
-        //       state.gitStar = git.stargazers_count;
-        //     });
-        //   } catch (error) { }
-        // }
+            set((state) => {
+              state.gitStar = git.stargazers_count;
+            });
+          } catch (error) { }
+        }
       })),
       {
         name: 'globalStore',

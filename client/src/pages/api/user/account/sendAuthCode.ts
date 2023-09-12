@@ -54,9 +54,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (username.includes('@')) {
       await sendEmailCode(username, code, type);
-    } else {
-      // 发送验证码
-      await sendPhoneCode(username, code);
     }
 
     jsonRes(res, {

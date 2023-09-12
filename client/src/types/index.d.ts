@@ -13,7 +13,7 @@ export type PagingData<T> = {
   total?: number;
 };
 
-export type RequestPaging = { pageNum: number; pageSize: number; [key]: any };
+export type RequestPaging = { pageNum: number; pageSize: number;[key]: any };
 
 export type FeConfigsType = {
   show_emptyChat?: boolean;
@@ -45,7 +45,7 @@ declare global {
   var qaQueueLen: number;
   var vectorQueueLen: number;
   var OpenAiEncMap: Tiktoken;
-
+  var grecaptcha: any;
   var logger: Logger;
 
   var sendInformQueue: (() => Promise<void>)[];

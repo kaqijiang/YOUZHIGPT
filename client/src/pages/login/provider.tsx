@@ -5,7 +5,6 @@ import { ResLogin } from '@/api/response/user';
 import { useChatStore } from '@/store/chat';
 import { useUserStore } from '@/store/user';
 import { setToken } from '@/utils/user';
-import { gitLogin } from '@/api/user';
 import { useToast } from '@/hooks/useToast';
 import Loading from '@/components/Loading';
 import { serviceSideProps } from '@/utils/i18n';
@@ -44,12 +43,6 @@ const provider = ({ code }: { code: string }) => {
     }
     try {
       const res = await (async () => {
-        if (loginStore.provider === 'git') {
-          return gitLogin({
-            code,
-            inviterId: localStorage.getItem('inviterId') || undefined
-          });
-        }
         return null;
       })();
       if (!res) {
