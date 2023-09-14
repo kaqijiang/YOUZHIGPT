@@ -27,8 +27,13 @@ export type FeConfigsType = {
   authorText?: string;
   beianText?: string;
   googleClientVerKey?: string;
-  gitLoginKey?: string;
-  exportLimitMinutes?: number;
+  oauth?: {
+    github?: string;
+    google?: string;
+  };
+  limit?: {
+    exportLimitMinutes?: number;
+  };
   scripts?: { [key: string]: string }[];
 };
 export type SystemEnvType = {
@@ -56,6 +61,7 @@ declare global {
   var chatModels: ChatModelItemType[];
   var qaModel: QAModelItemType;
   var vectorModels: VectorModelItemType[];
+  var systemVersion: string;
 
   interface Window {
     ['pdfjs-dist/build/pdf']: any;

@@ -5,6 +5,7 @@ import { UserAuthTypeEnum } from '@/constants/common';
 import { UserBillType, UserType, UserUpdateParams } from '@/types/user';
 import type { PagingData, RequestPaging } from '@/types';
 import { informSchema, PaySchema } from '@/types/mongoSchema';
+import { OAuthEnum } from '@/constants/user';
 
 export const sendAuthCode = (data: {
   username: string;

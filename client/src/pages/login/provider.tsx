@@ -11,7 +11,7 @@ import { serviceSideProps } from '@/utils/i18n';
 import { useQuery } from '@tanstack/react-query';
 import { getErrText } from '@/utils/tools';
 
-const provider = ({ code }: { code: string }) => {
+const provider = ({ code, state }: { code: string; state: string }) => {
   const { loginStore } = useGlobalStore();
   const { setLastChatId, setLastChatAppId } = useChatStore();
   const { setUserInfo } = useUserStore();
@@ -67,7 +67,18 @@ const provider = ({ code }: { code: string }) => {
   }, [code, loginStore, loginSuccess]);
 
   useQuery(['init', code], () => {
-    authCode();
+    if (!code) return;
+    if (state !== loginStore?.state) {
+      toast({
+        status: 'warning',
+        title: '安全校验失败'
+      });
+      setTimeout(() => {
+        router.replace('/login');
+      }, 1000);
+      return;
+    }
+    authCode(code);
     return null;
   });
 
@@ -78,6 +89,7 @@ export async function getServerSideProps(content: any) {
   return {
     props: {
       code: content?.query?.code,
+      state: content?.query?.state,
       ...(await serviceSideProps(content))
     }
   };

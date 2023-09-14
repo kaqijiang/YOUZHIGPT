@@ -1,14 +1,16 @@
-import React, { useState, Dispatch, useCallback } from 'react';
-import { FormControl, Flex, Input, Button, FormErrorMessage, Box } from '@chakra-ui/react';
+import React, { useState, Dispatch, useCallback, useRef } from 'react';
+import { FormControl, Flex, Input, Button, FormErrorMessage, Box, Link } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { PageTypeEnum } from '@/constants/user';
+import { OAuthEnum, PageTypeEnum } from '@/constants/user';
 import { postLogin } from '@/api/user';
 import type { ResLogin } from '@/api/response/user';
 import { useToast } from '@/hooks/useToast';
 import { feConfigs } from '@/store/static';
 import { useGlobalStore } from '@/store/global';
 import MyIcon from '@/components/Icon';
+import { customAlphabet } from 'nanoid';
+const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz1234567890', 8);
 
 interface Props {
   setPageType: Dispatch<`${PageTypeEnum}`>;
@@ -106,28 +108,43 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
           </FormErrorMessage>
         </FormControl>
         {feConfigs?.show_register && (
-          <Flex align={'center'} justifyContent={'space-between'} mt={3} color={'myBlue.600'}>
-            <Box
-              cursor={'pointer'}
-              _hover={{ textDecoration: 'underline' }}
-              onClick={() => setPageType('forgetPassword')}
-              fontSize="sm"
-            >
-              忘记密码?
-            </Box>
-            <Box
-              cursor={'pointer'}
-              _hover={{ textDecoration: 'underline' }}
-              onClick={() => setPageType('register')}
-              fontSize="sm"
-            >
-              注册账号
-            </Box>
-          </Flex>
+          <>
+            <Flex align={'center'} justifyContent={'space-between'} mt={3} color={'myBlue.600'}>
+              <Box
+                cursor={'pointer'}
+                _hover={{ textDecoration: 'underline' }}
+                onClick={() => setPageType('forgetPassword')}
+                fontSize="sm"
+              >
+                忘记密码?
+              </Box>
+              <Box
+                cursor={'pointer'}
+                _hover={{ textDecoration: 'underline' }}
+                onClick={() => setPageType('register')}
+                fontSize="sm"
+              >
+                注册账号
+              </Box>
+            </Flex>
+            {feConfigs?.show_doc && (
+              <Box textAlign={'center'} mt={2} fontSize={'sm'}>
+                使用即代表你同意我们的{' '}
+                <Link
+                  href="https://nhrvt0kw31.feishu.cn/docx/EboId6vUaod6JnxMMnYcTh7Ynif"
+                  target={'_blank'}
+                  color={'myBlue.600'}
+                >
+                  免责声明
+                </Link>
+              </Box>
+            )}
+          </>
         )}
+
         <Button
           type="submit"
-          mt={6}
+          mt={5}
           w={'100%'}
           size={['md', 'lg']}
           colorScheme="blue"

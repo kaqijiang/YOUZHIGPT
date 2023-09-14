@@ -9,7 +9,9 @@
     "show_doc": true,
     "systemTitle": "YOUZHI",
     "authorText": "Power By api.youzhi.chat",
-    "exportLimitMinutes": 0,
+    "limit": {
+      "exportLimitMinutes": 0
+    },
     "scripts": []
   },
   "SystemParams": {

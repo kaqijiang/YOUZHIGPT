@@ -4,27 +4,49 @@ import { connectToDatabase, TrainingData } from '@/service/mongo';
 import { authUser } from '@/service/utils/auth';
 import { GridFSStorage } from '@/service/lib/gridfs';
 import { PgClient } from '@/service/pg';
-import { PgTrainingTableName } from '@/constants/plugin';
-import { KbFileItemType } from '@/types/plugin';
+import { PgDatasetTableName } from '@/constants/plugin';
 import { FileStatusEnum, OtherFileId } from '@/constants/kb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   try {
     await connectToDatabase();
 
-    let { kbId, searchText } = req.query as { kbId: string; searchText: string };
-    searchText = searchText.replace(/'/g, '');
+    let {
+      pageNum = 1,
+      pageSize = 10,
+      kbId,
+      searchText = ''
+    } = req.body as { pageNum: number; pageSize: number; kbId: string; searchText: string };
+    searchText = searchText?.replace(/'/g, '');
 
     // 凭证校验
     const { userId } = await authUser({ req, authToken: true });
 
+    // find files
     const gridFs = new GridFSStorage('dataset', userId);
-    const bucket = gridFs.GridFSBucket();
+    const collection = gridFs.Collection();
 
-    const files = await bucket
-      .find({ ['metadata.kbId']: kbId, ...(searchText && { filename: { $regex: searchText } }) })
-      .sort({ _id: -1 })
-      .toArray();
+    const mongoWhere = {
+      ['metadata.kbId']: kbId,
+      ['metadata.userId']: userId,
+      ['metadata.datasetUsed']: true,
+      ...(searchText && { filename: { $regex: searchText } })
+    };
+    const [files, total] = await Promise.all([
+      collection
+        .find(mongoWhere, {
+          projection: {
+            _id: 1,
+            filename: 1,
+            uploadDate: 1,
+            length: 1
+          }
+        })
+        .skip((pageNum - 1) * pageSize)
+        .limit(pageSize)
+        .toArray(),
+      collection.countDocuments(mongoWhere)
+    ]);
 
     async function GetOtherData() {
       return {
@@ -35,7 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         status: (await TrainingData.findOne({ userId, kbId, file_id: '' }))
           ? FileStatusEnum.embedding
           : FileStatusEnum.ready,
-        chunkLength: await PgClient.count(PgTrainingTableName, {
+        chunkLength: await PgClient.count(PgDatasetTableName, {
           fields: ['id'],
           where: [
             ['user_id', userId],
@@ -58,7 +80,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           status: (await TrainingData.findOne({ userId, kbId, file_id: file._id }))
             ? FileStatusEnum.embedding
             : FileStatusEnum.ready,
-          chunkLength: await PgClient.count(PgTrainingTableName, {
+          chunkLength: await PgClient.count(PgDatasetTableName, {
             fields: ['id'],
             where: [
               ['user_id', userId],
@@ -72,8 +94,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       })
     ]);
 
-    jsonRes<KbFileItemType[]>(res, {
-      data: data.flat().filter((item) => item.chunkLength > 0)
+    jsonRes(res, {
+      data: {
+        pageNum,
+        pageSize,
+        data: data.flat(),
+        total
+      }
     });
   } catch (err) {
     jsonRes(res, {

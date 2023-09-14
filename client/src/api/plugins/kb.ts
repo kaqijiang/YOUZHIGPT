@@ -1,12 +1,5 @@
 import { GET, POST, PUT, DELETE } from '../request';
-import type {
-  DatasetItemType,
-  FileInfo,
-  KbFileItemType,
-  KbItemType,
-  KbListItemType,
-  KbPathItemType
-} from '@/types/plugin';
+import type { DatasetItemType, KbItemType, KbListItemType, KbPathItemType } from '@/types/plugin';
 import { TrainingModeEnum } from '@/constants/plugin';
 import {
   Props as PushDataProps,
@@ -19,10 +12,11 @@ import {
 import { Props as UpdateDataProps } from '@/pages/api/openapi/kb/updateData';
 import type { KbUpdateParams, CreateKbParams, GetKbDataListProps } from '../request/kb';
 import { QuoteItemType } from '@/types/chat';
+import { KbTypeEnum } from '@/constants/kb';
 
 /* knowledge base */
-export const getKbList = (parentId?: string) =>
-  GET<KbListItemType[]>(`/plugins/kb/list`, { parentId });
+export const getKbList = (data: { parentId?: string; type?: `${KbTypeEnum}` }) =>
+  GET<KbListItemType[]>(`/plugins/kb/list`, data);
 export const getAllDataset = () => GET<KbListItemType[]>(`/plugins/kb/allDataset`);
 
 export const getKbPaths = (parentId?: string) =>
@@ -36,16 +30,6 @@ export const putKbById = (data: KbUpdateParams) => PUT(`/plugins/kb/update`, dat
 
 export const delKbById = (id: string) => DELETE(`/plugins/kb/delete?id=${id}`);
 
-/* kb file */
-export const getKbFiles = (data: { kbId: string; searchText: string }) =>
-  GET<KbFileItemType[]>(`/plugins/kb/file/list`, data);
-export const deleteKbFileById = (params: { fileId: string; kbId: string }) =>
-  DELETE(`/plugins/kb/file/delFileByFileId`, params);
-export const getFileInfoById = (fileId: string) =>
-  GET<FileInfo>(`/plugins/kb/file/getFileInfo`, { fileId });
-export const delEmptyFiles = (kbId: string) =>
-  DELETE(`/plugins/kb/file/deleteEmptyFiles`, { kbId });
-
 /* kb data */
 export const getKbDataList = (data: GetKbDataListProps) =>
   POST(`/plugins/kb/data/getDataList`, data);
@@ -53,7 +37,7 @@ export const getKbDataList = (data: GetKbDataListProps) =>
 /**
  * 获取导出数据（不分页）
  */
-export const getExportDataList = (data: { kbId: string; fileId: string }) =>
+export const getExportDataList = (data: { kbId: string }) =>
   GET<[string, string, string][]>(`/plugins/kb/data/exportModelData`, data, {
     timeout: 600000
   });

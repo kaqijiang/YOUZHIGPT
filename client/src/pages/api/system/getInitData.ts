@@ -13,6 +13,7 @@ export type InitDateResponse = {
   qaModel: QAModelItemType;
   vectorModels: VectorModelItemType[];
   feConfigs: FeConfigsType;
+  systemVersion: string;
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -24,7 +25,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       feConfigs: global.feConfigs,
       chatModels: global.chatModels,
       qaModel: global.qaModel,
-      vectorModels: global.vectorModels
+      vectorModels: global.vectorModels,
+      systemVersion: global.systemVersion || '0.0.0'
     }
   });
 }
@@ -44,7 +46,9 @@ const defaultFeConfigs: FeConfigsType = {
   show_doc: true,
   systemTitle: 'YOUZHI',
   authorText: 'Power by YOUZHI API.',
-  exportLimitMinutes: 0,
+  limit: {
+    exportLimitMinutes: 0
+  },
   scripts: []
 };
 const defaultChatModels = [
@@ -94,9 +98,14 @@ export async function getInitConfig() {
   try {
     if (global.feConfigs) return;
 
+    getSystemVersion();
+
     const filename =
       process.env.NODE_ENV === 'development' ? 'data/config.local.json' : '/app/data/config.json';
     const res = JSON.parse(readFileSync(filename, 'utf-8'));
+
+    console.log(`System Version: ${global.systemVersion}`);
+
     console.log(res);
 
     global.systemEnv = res.SystemParams
@@ -118,4 +127,20 @@ export function setDefaultData() {
   global.chatModels = defaultChatModels;
   global.qaModel = defaultQAModel;
   global.vectorModels = defaultVectorModels;
+}
+
+export function getSystemVersion() {
+  try {
+    if (process.env.NODE_ENV === 'development') {
+      global.systemVersion = process.env.npm_package_version || '0.0.0';
+      return;
+    }
+    const packageJson = JSON.parse(readFileSync('/app/package.json', 'utf-8'));
+
+    global.systemVersion = packageJson?.version;
+  } catch (error) {
+    console.log(error);
+
+    global.systemVersion = '0.0.0';
+  }
 }

@@ -9,11 +9,15 @@ import {
   Th,
   Td,
   Tbody,
-  Image
+  Image,
+  MenuButton,
+  Menu,
+  MenuList,
+  MenuItem
 } from '@chakra-ui/react';
-import { getKbFiles, deleteKbFileById } from '@/api/plugins/kb';
+import { getTrainingData } from '@/api/plugins/kb';
+import { getDatasetFiles, delDatasetFileById, updateDatasetFile } from '@/api/core/dataset/file';
 import { useQuery } from '@tanstack/react-query';
-import { useToast } from '@/hooks/useToast';
 import { debounce } from 'lodash';
 import { formatFileSize } from '@/utils/tools';
 import { useConfirm } from '@/hooks/useConfirm';
@@ -24,37 +28,58 @@ import dayjs from 'dayjs';
 import { fileImgs } from '@/constants/common';
 import { useRequest } from '@/hooks/useRequest';
 import { useLoading } from '@/hooks/useLoading';
-import { FileStatusEnum } from '@/constants/kb';
+import { FileStatusEnum, OtherFileId } from '@/constants/kb';
 import { useRouter } from 'next/router';
+import { usePagination } from '@/hooks/usePagination';
+import { KbFileItemType } from '@/types/plugin';
+import { useGlobalStore } from '@/store/global';
+import MyMenu from '@/components/MyMenu';
+import { useEditTitle } from '@/hooks/useEditTitle';
 
 const FileCard = ({ kbId }: { kbId: string }) => {
   const BoxRef = useRef<HTMLDivElement>(null);
   const lastSearch = useRef('');
   const router = useRouter();
   const { t } = useTranslation();
-  const [searchText, setSearchText] = useState('');
   const { Loading } = useLoading();
+  const [searchText, setSearchText] = useState('');
+  const { setLoading } = useGlobalStore();
   const { openConfirm, ConfirmModal } = useConfirm({
     content: t('kb.Confirm to delete the file')
   });
 
   const {
-    data: files = [],
-    refetch,
-    isInitialLoading
-  } = useQuery(['getFiles', kbId], () => getKbFiles({ kbId, searchText }), {
-    refetchInterval: 6000,
-    refetchOnWindowFocus: true
+    data: files,
+    Pagination,
+    total,
+    getData,
+    isLoading,
+    pageNum,
+    pageSize
+  } = usePagination<KbFileItemType>({
+    api: getDatasetFiles,
+    pageSize: 20,
+    params: {
+      kbId,
+      searchText
+    },
+    onChange() {
+      if (BoxRef.current) {
+        BoxRef.current.scrollTop = 0;
+      }
+    }
   });
 
+  // change search
   const debounceRefetch = useCallback(
     debounce(() => {
-      refetch();
+      getData(1);
       lastSearch.current = searchText;
     }, 300),
     []
   );
 
+  // add file icon
   const formatFiles = useMemo(
     () =>
       files.map((file) => ({
@@ -63,22 +88,41 @@ const FileCard = ({ kbId }: { kbId: string }) => {
       })),
     [files]
   );
-  const totalDataLength = useMemo(
-    () => files.reduce((sum, item) => sum + item.chunkLength, 0),
-    [files]
-  );
 
-  const { mutate: onDeleteFile, isLoading } = useRequest({
-    mutationFn: (fileId: string) =>
-      deleteKbFileById({
+  const { mutate: onDeleteFile } = useRequest({
+    mutationFn: (fileId: string) => {
+      setLoading(true);
+      return delDatasetFileById({
         fileId,
         kbId
-      }),
+      });
+    },
     onSuccess() {
-      refetch();
+      getData(pageNum);
+    },
+    onSettled() {
+      setLoading(false);
     },
     successToast: t('common.Delete Success'),
     errorToast: t('common.Delete Failed')
+  });
+  const { mutate: onUpdateFilename } = useRequest({
+    mutationFn: (data: { id: string; name: string }) => {
+      setLoading(true);
+      return updateDatasetFile(data);
+    },
+    onSuccess() {
+      getData(pageNum);
+    },
+    onSettled() {
+      setLoading(false);
+    },
+    successToast: t('common.Delete Success'),
+    errorToast: t('common.Delete Failed')
+  });
+
+  const { onOpenModal, EditModal: EditTitleModal } = useEditTitle({
+    title: t('Rename')
   });
 
   const statusMap = {
@@ -92,18 +136,48 @@ const FileCard = ({ kbId }: { kbId: string }) => {
     }
   };
 
+  // training data
+  const { data: { qaListLen = 0, vectorListLen = 0 } = {}, refetch: refetchTrainingData } =
+    useQuery(['getModelSplitDataList', kbId], () => getTrainingData({ kbId, init: false }), {
+      onError(err) {
+        console.log(err);
+      }
+    });
+
+  useQuery(
+    ['refetchTrainingData', kbId],
+    () => Promise.all([refetchTrainingData(), getData(pageNum)]),
+    {
+      refetchInterval: 8000,
+      enabled: qaListLen > 0 || vectorListLen > 0
+    }
+  );
+
   return (
-    <Box ref={BoxRef} position={'relative'} py={[1, 5]} h={'100%'} overflow={'overlay'}>
-      <Flex justifyContent={'space-between'} px={5}>
-        <Box fontWeight={'bold'} fontSize={'lg'} mr={2}>
-          {t('kb.Files', { total: files.length })}
+    <Box ref={BoxRef} py={[1, 5]} h={'100%'} overflow={'overlay'}>
+      <Flex justifyContent={'space-between'} px={[2, 5]}>
+        <Box>
+          <Box fontWeight={'bold'} fontSize={['md', 'lg']} mr={2}>
+            {t('kb.Files', { total })}
+          </Box>
+          <Box as={'span'} fontSize={'sm'}>
+            {(qaListLen > 0 || vectorListLen > 0) && (
+              <>
+                ({qaListLen > 0 ? `${qaListLen}条数据正在拆分，` : ''}
+                {vectorListLen > 0 ? `${vectorListLen}条数据正在生成索引，` : ''}
+                请耐心等待... )
+              </>
+            )}
+          </Box>
         </Box>
+
         <Flex alignItems={'center'}>
           <MyInput
             leftIcon={
               <MyIcon name="searchLight" position={'absolute'} w={'14px'} color={'myGray.500'} />
             }
-            w={['100%', '200px']}
+            w={['100%', '250px']}
+            size={['sm', 'md']}
             placeholder={t('common.Search') || ''}
             value={searchText}
             onChange={(e) => {
@@ -112,25 +186,23 @@ const FileCard = ({ kbId }: { kbId: string }) => {
             }}
             onBlur={() => {
               if (searchText === lastSearch.current) return;
-              refetch();
+              getData(1);
             }}
             onKeyDown={(e) => {
               if (searchText === lastSearch.current) return;
               if (e.key === 'Enter') {
-                refetch();
+                getData(1);
               }
             }}
           />
         </Flex>
       </Flex>
-      <TableContainer mt={[0, 3]}>
+      <TableContainer mt={[0, 3]} position={'relative'} minH={'70vh'}>
         <Table variant={'simple'} fontSize={'sm'}>
           <Thead>
             <Tr>
               <Th>{t('kb.Filename')}</Th>
-              <Th>
-                {t('kb.Chunk Length')}({totalDataLength})
-              </Th>
+              <Th>{t('kb.Chunk Length')}</Th>
               <Th>{t('kb.Upload Time')}</Th>
               <Th>{t('kb.File Size')}</Th>
               <Th>{t('common.Status')}</Th>
@@ -145,7 +217,7 @@ const FileCard = ({ kbId }: { kbId: string }) => {
                 cursor={'pointer'}
                 title={'点击查看数据详情'}
                 onClick={() =>
-                  router.push({
+                  router.replace({
                     query: {
                       kbId,
                       fileId: file.id,
@@ -167,40 +239,104 @@ const FileCard = ({ kbId }: { kbId: string }) => {
                 </Td>
                 <Td>{dayjs(file.uploadTime).format('YYYY/MM/DD HH:mm')}</Td>
                 <Td>{formatFileSize(file.size)}</Td>
-                <Td
-                  display={'flex'}
-                  alignItems={'center'}
-                  _before={{
-                    content: '""',
-                    w: '10px',
-                    h: '10px',
-                    mr: 2,
-                    borderRadius: 'lg',
-                    bg: statusMap[file.status].color
-                  }}
-                >
-                  {statusMap[file.status].text}
+                <Td>
+                  <Flex
+                    alignItems={'center'}
+                    _before={{
+                      content: '""',
+                      w: '10px',
+                      h: '10px',
+                      mr: 2,
+                      borderRadius: 'lg',
+                      bg: statusMap[file.status].color
+                    }}
+                  >
+                    {statusMap[file.status].text}
+                  </Flex>
                 </Td>
                 <Td onClick={(e) => e.stopPropagation()}>
-                  <MyIcon
-                    name={'delete'}
-                    w={'14px'}
-                    _hover={{ color: 'red.600' }}
-                    onClick={() =>
-                      openConfirm(() => {
-                        onDeleteFile(file.id);
-                      })()
+                  <MyMenu
+                    width={100}
+                    Button={
+                      <MenuButton
+                        w={'22px'}
+                        h={'22px'}
+                        borderRadius={'md'}
+                        _hover={{
+                          color: 'myBlue.600',
+                          '& .icon': {
+                            bg: 'myGray.100'
+                          }
+                        }}
+                      >
+                        <MyIcon
+                          className="icon"
+                          name={'more'}
+                          h={'16px'}
+                          w={'16px'}
+                          px={1}
+                          py={1}
+                          borderRadius={'md'}
+                          cursor={'pointer'}
+                        />
+                      </MenuButton>
                     }
+                    menuList={[
+                      ...(file.id !== OtherFileId
+                        ? [
+                            {
+                              child: (
+                                <Flex alignItems={'center'}>
+                                  <MyIcon name={'edit'} w={'14px'} mr={2} />
+                                  {t('Rename')}
+                                </Flex>
+                              ),
+                              onClick: () =>
+                                onOpenModal({
+                                  defaultVal: file.filename,
+                                  onSuccess: (newName) => {
+                                    onUpdateFilename({
+                                      id: file.id,
+                                      name: newName
+                                    });
+                                  }
+                                })
+                            }
+                          ]
+                        : []),
+                      {
+                        child: (
+                          <Flex alignItems={'center'}>
+                            <MyIcon
+                              mr={1}
+                              name={'delete'}
+                              w={'14px'}
+                              _hover={{ color: 'red.600' }}
+                            />
+                            <Box>{t('common.Delete')}</Box>
+                          </Flex>
+                        ),
+                        onClick: () =>
+                          openConfirm(() => {
+                            onDeleteFile(file.id);
+                          })()
+                      }
+                    ]}
                   />
                 </Td>
               </Tr>
             ))}
           </Tbody>
         </Table>
+        <Loading loading={isLoading && files.length === 0} fixed={false} />
+        {total > pageSize && (
+          <Flex mt={2} justifyContent={'center'}>
+            <Pagination />
+          </Flex>
+        )}
       </TableContainer>
-
       <ConfirmModal />
-      <Loading loading={isInitialLoading || isLoading} />
+      <EditTitleModal />
     </Box>
   );
 };

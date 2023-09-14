@@ -1,5 +1,17 @@
-import React, { useCallback, useRef } from 'react';
-import { Box, Flex, Button, useDisclosure, useTheme, Divider, Select } from '@chakra-ui/react';
+import React, { useCallback, useRef, useState } from 'react';
+import {
+  Box,
+  Flex,
+  Button,
+  useDisclosure,
+  useTheme,
+  Divider,
+  Select,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem
+} from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { UserUpdateParams } from '@/types/user';
 import { useToast } from '@/hooks/useToast';
@@ -9,13 +21,17 @@ import { useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useSelectFile } from '@/hooks/useSelectFile';
 import { compressImg } from '@/utils/file';
-import { feConfigs } from '@/store/static';
+import { feConfigs, systemVersion } from '@/store/static';
 import { useTranslation } from 'next-i18next';
 import { timezoneList } from '@/utils/user';
 import Loading from '@/components/Loading';
 import Avatar from '@/components/Avatar';
 import MyIcon from '@/components/Icon';
 import MyTooltip from '@/components/MyTooltip';
+import { getLangStore, LangEnum, langMap, setLangStore } from '@/utils/i18n';
+import { useRouter } from 'next/router';
+import MyMenu from '@/components/MyMenu';
+import MySelect from '@/components/Select';
 
 const PayModal = dynamic(() => import('./PayModal'), {
   loading: () => <Loading fixed={false} />,
@@ -32,7 +48,8 @@ const OpenAIAccountModal = dynamic(() => import('./OpenAIAccountModal'), {
 
 const UserInfo = () => {
   const theme = useTheme();
-  const { t } = useTranslation();
+  const router = useRouter();
+  const { t, i18n } = useTranslation();
   const { userInfo, updateUserInfo, initUserInfo } = useUserStore();
   const timezones = useRef(timezoneList());
   const { reset } = useForm<UserUpdateParams>({
@@ -56,6 +73,8 @@ const UserInfo = () => {
     fileType: '.jpg,.png',
     multiple: false
   });
+
+  const [language, setLanguage] = useState<`${LangEnum}`>(getLangStore());
 
   const onclickSave = useCallback(
     async (data: UserType) => {
@@ -124,10 +143,12 @@ const UserInfo = () => {
             h={['44px', '54px']}
             borderRadius={'50%'}
             border={theme.borders.base}
+            overflow={'hidden'}
+            p={'2px'}
             boxShadow={'0 0 5px rgba(0,0,0,0.1)'}
             mb={2}
           >
-            <Avatar src={userInfo?.avatar} w={'100%'} h={'100%'} />
+            <Avatar src={userInfo?.avatar} borderRadius={'50%'} w={'100%'} h={'100%'} />
           </Box>
         </MyTooltip>
 
@@ -146,6 +167,25 @@ const UserInfo = () => {
         <Flex alignItems={'center'} w={['85%', '300px']}>
           <Box flex={'0 0 80px'}>{t('user.Account')}:&nbsp;</Box>
           <Box flex={1}>{userInfo?.username}</Box>
+        </Flex>
+        <Flex mt={6} alignItems={'center'} w={['85%', '300px']}>
+          <Box flex={'0 0 80px'}>{t('user.Language')}:&nbsp;</Box>
+          <Box flex={'1 0 0'}>
+            <MySelect
+              value={language}
+              list={Object.entries(langMap).map(([key, lang]) => ({
+                label: lang.label,
+                value: key
+              }))}
+              onchange={(val: any) => {
+                const lang = val;
+                setLangStore(lang);
+                setLanguage(lang);
+                i18n?.changeLanguage?.(lang);
+                router.reload();
+              }}
+            />
+          </Box>
         </Flex>
         <Flex mt={6} alignItems={'center'} w={['85%', '300px']}>
           <Box flex={'0 0 80px'}>{t('user.Timezone')}:&nbsp;</Box>
@@ -171,19 +211,48 @@ const UserInfo = () => {
           </Button>
         </Flex>
         {feConfigs?.show_userDetail && (
+          <Box mt={6} whiteSpace={'nowrap'} w={['85%', '300px']}>
+            <Flex alignItems={'center'}>
+              <Box flex={'0 0 80px'}>{t('user.Balance')}:&nbsp;</Box>
+              <Box flex={1}>
+                <strong>{userInfo?.balance.toFixed(3)}</strong> 元
+              </Box>
+              <Button size={['sm', 'md']} ml={5} onClick={onOpenPayModal}>
+                {t('user.Pay')}
+              </Button>
+            </Flex>
+          </Box>
+        )}
+        {feConfigs?.show_doc && (
           <>
-            <Box mt={6} whiteSpace={'nowrap'} w={['85%', '300px']}>
-              <Flex alignItems={'center'}>
-                <Box flex={'0 0 80px'}>{t('user.Balance')}:&nbsp;</Box>
-                <Box flex={1}>
-                  <strong>{userInfo?.balance.toFixed(3)}</strong> 元
-                </Box>
-                <Button size={['sm', 'md']} ml={5} onClick={onOpenPayModal}>
-                  {t('user.Pay')}
-                </Button>
-              </Flex>
-            </Box>
-
+            <Flex
+              mt={4}
+              w={['85%', '300px']}
+              py={3}
+              px={6}
+              border={theme.borders.sm}
+              borderWidth={'1.5px'}
+              borderRadius={'md'}
+              alignItems={'center'}
+              cursor={'pointer'}
+              userSelect={'none'}
+              onClick={() => {
+                window.open(`https://doc.fastgpt.run/docs/intro`);
+              }}
+            >
+              <MyIcon name={'courseLight'} w={'18px'} />
+              <Box ml={2} flex={1}>
+                {t('system.Help Document')}
+              </Box>
+              <Box w={'8px'} h={'8px'} borderRadius={'50%'} bg={'#67c13b'} />
+              <Box fontSize={'md'} ml={2}>
+                V{systemVersion}
+              </Box>
+            </Flex>
+          </>
+        )}
+        {feConfigs?.show_userDetail && (
+          <>
             <Divider my={3} />
 
             <MyTooltip label={'点击配置账号'}>
