@@ -12,7 +12,7 @@ const APIKeyModal = dynamic(() => import('@/components/APIKeyModal'), {
 const API = ({ appId }: { appId: string }) => {
   const theme = useTheme();
   const { copyData } = useCopyData();
-  const [baseUrl, setBaseUrl] = useState('https://fastgpt.run/api/openapi');
+  const [baseUrl, setBaseUrl] = useState('https://youzhi.chat/api/openapi');
   const {
     isOpen: isOpenAPIModal,
     onOpen: onOpenAPIModal,
@@ -77,7 +77,7 @@ const API = ({ appId }: { appId: string }) => {
               width: '100%',
               height: '100%'
             }}
-            src="https://kjqvjse66l.feishu.cn/docx/DmLedTWtUoNGX8xui9ocdUEjnNh"
+            src="https://nhrvt0kw31.feishu.cn/docx/NUEvdO5UmopnoyxdeKAcgs6Lnxh"
             frameBorder="0"
             onLoad={() => setIsLoaded(true)}
             onError={() => setIsLoaded(true)}

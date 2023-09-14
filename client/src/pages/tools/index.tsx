@@ -25,21 +25,12 @@ const Tools = () => {
         }
       ]
       : []),
-    ...(feConfigs?.show_git
-      ? [
-        {
-          icon: 'git',
-          label: 'GitHub 地址',
-          link: 'https://github.com/labring/YOUZHI'
-        }
-      ]
-      : []),
     ...(feConfigs?.show_doc
       ? [
         {
           icon: 'courseLight',
           label: '关于',
-          link: 'https://doc.fastgpt.run/docs/intro'
+          link: 'https://nhrvt0kw31.feishu.cn/docx/RF1Kd8xYYotZRUxcVjHcaqTUn5a'
         }
       ]
       : [])

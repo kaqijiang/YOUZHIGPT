@@ -19,6 +19,7 @@ const Navbar = () => {
   } = useDisclosure();
   const { isOpen: isOpenMenu, onOpen: onOpenMenu, onClose: onCloseMenu } = useDisclosure();
   const { isPc } = useGlobalStore();
+
   const menuList: any[] = [];
   const bgOpacity = useMemo(() => {
     const rate = scrollTop / 120;
@@ -75,16 +76,8 @@ const Navbar = () => {
           {feConfigs?.systemTitle}
         </Box>
         <Box flex={1} />
-        {isPc ? (
+        {isPc && (
           <>
-            {/* {menuList.map((item) => (
-              <Box key={item.key} {...menuStyles} onClick={item.onClick}>
-                {item.label}
-              </Box>
-            ))}
-            <Box px={4} color={'myGray.500'}>
-              |
-            </Box> */}
             <Box {...menuStyles} onClick={() => router.push('/login')}>
               {t('home.Login')}
             </Box>
@@ -92,13 +85,8 @@ const Navbar = () => {
               {t('home.Start Now')}
             </Button>
           </>
-        ) : (
-          <MyIcon
-            name={isOpenMenu ? 'closeLight' : 'menu'}
-            w={'20px'}
-            onClick={() => (isOpenMenu ? onCloseMenu() : onOpenMenu())}
-          />
-        )}
+        )
+        }
       </Flex>
       {isOpenMenu && !isPc && (
         <Box mt={'15vh'} ml={'10vw'}>
@@ -107,7 +95,7 @@ const Navbar = () => {
               {item.label}
             </Box>
           ))}
-          <Box bg={'myGray.500'} h={'1.5px'} w={'20px'} mb={8} />
+
           <Box mb={10} onClick={() => router.push('/login')}>
             {t('home.Login')}
           </Box>

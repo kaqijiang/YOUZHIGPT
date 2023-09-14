@@ -108,18 +108,23 @@ const Login = () => {
             px={10}
             borderRadius={isPc ? 'md' : 'none'}
           >
-            {/* <DynamicComponent type={pageType} /> */}
-            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%' }}>
-              <h2 style={{ fontSize: '28px', marginBottom: '10px', fontWeight: 'bold' }}>有知-YOUZHI</h2>
-              <p style={{ fontSize: '18px', marginBottom: '10px', color: '#2563EB', fontWeight: 'bold' }}>一个个性化知识库/智能客服平台</p>
-              <p style={{ fontSize: '16px', marginBottom: '5px', color: '#3B82F6' }}>打造知识星球</p>
-              <p style={{ fontSize: '16px', marginBottom: '5px', color: '#3B82F6' }}>存储个人知识</p>
-              <p style={{ fontSize: '16px', marginBottom: '10px', color: '#3B82F6' }}>随时检索利用</p>
-              <p style={{ fontSize: '16px', marginBottom: '10px', color: '#3B82F6' }}>利用强大的GPT+大模型，让你的知识库更智能、丰富。</p>
-              <p style={{ fontSize: '20px', marginBottom: '5px' }}>传统训练知识库：</p>
-              <span style={{ textDecoration: 'line-through', fontSize: '14px', marginBottom: '15px', color: '#9CA3AF' }}>1.数据收集、2.数据预处理、3.数据标注、4.模型选择、5.模型训练、6.模型评估、7.模型优化、8.模型部署、9.网站搭建、10.数据推理/使用</span>
-              <p style={{ fontSize: '20px', marginTop: '15px', fontWeight: 'bold', color: '#2563EB' }}>用有知，直接上手使用。</p>
-            </div>
+            {isPc ? (
+              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%' }}>
+                <h2 style={{ fontSize: '28px', marginBottom: '10px', fontWeight: 'bold' }}>有知-YOUZHI</h2>
+                <p style={{ fontSize: '18px', marginBottom: '10px', color: '#2563EB', fontWeight: 'bold' }}>一个个性化知识库/智能客服平台</p>
+                <p style={{ fontSize: '16px', marginBottom: '5px', color: '#3B82F6' }}>打造知识星球</p>
+                <p style={{ fontSize: '16px', marginBottom: '5px', color: '#3B82F6' }}>存储个人知识</p>
+                <p style={{ fontSize: '16px', marginBottom: '10px', color: '#3B82F6' }}>随时检索利用</p>
+                <p style={{ fontSize: '16px', marginBottom: '10px', color: '#3B82F6' }}>利用强大的GPT+大模型，让你的知识库更智能、丰富。</p>
+                <p style={{ fontSize: '20px', marginBottom: '5px' }}>传统训练知识库：</p>
+                <span style={{ textDecoration: 'line-through', fontSize: '14px', marginBottom: '15px', color: '#9CA3AF' }}>1.数据收集、2.数据预处理、3.数据标注、4.模型选择、5.模型训练、6.模型评估、7.模型优化、8.模型部署、9.网站搭建、10.数据推理/使用</span>
+                <p style={{ fontSize: '20px', marginTop: '15px', fontWeight: 'bold', color: '#2563EB' }}>用有知，直接上手使用。</p>
+              </div>
+            ) : (
+              <DynamicComponent type={pageType} />
+            )
+            }
+
             {feConfigs?.show_contact && (
               <Box
                 fontSize={'sm'}

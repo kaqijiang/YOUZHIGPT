@@ -64,7 +64,7 @@ const provider = ({ code, state }: { code: string; state: string }) => {
         router.replace('/login');
       }, 1000);
     }
-  }, [code, loginStore, loginSuccess]);
+  }, [code, loginStore, loginSuccess, toast, router]);
 
   useQuery(['init', code], () => {
     if (!code) return;
@@ -78,7 +78,7 @@ const provider = ({ code, state }: { code: string; state: string }) => {
       }, 1000);
       return;
     }
-    authCode(code);
+    authCode();
     return null;
   });
 

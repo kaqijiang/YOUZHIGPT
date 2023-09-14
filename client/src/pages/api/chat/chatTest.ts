@@ -76,7 +76,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       appName,
       appId,
       userId,
-      source: BillSourceEnum.fastgpt,
+      source: BillSourceEnum.YouGPT,
       response: responseData
     });
   } catch (err: any) {

@@ -28,7 +28,7 @@ const BillSchema = new Schema({
   source: {
     type: String,
     enum: Object.keys(BillSourceMap),
-    default: BillSourceEnum.fastgpt
+    default: BillSourceEnum.YouGPT
   },
   list: {
     type: [

@@ -78,7 +78,7 @@ export const authUser = async ({
       return Promise.reject(ERROR_ENUM.unAuthorization);
     }
 
-    // Bearer fastgpt-xxxx-appId
+    // Bearer YouGPT-xxxx-appId
     const auth = authorization.split(' ')[1];
     if (!auth) {
       return Promise.reject(ERROR_ENUM.unAuthorization);

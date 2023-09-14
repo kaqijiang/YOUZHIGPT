@@ -1,7 +1,7 @@
 async function embedChatbot() {
-  const chatBtnId = 'fastgpt-chatbot-button';
-  const chatWindowId = 'fastgpt-chatbot-window';
-  const script = document.getElementById('fastgpt-iframe');
+  const chatBtnId = 'YouGPT-chatbot-button';
+  const chatWindowId = 'YouGPT-chatbot-window';
+  const script = document.getElementById('YouGPT-iframe');
   const botSrc = script?.getAttribute('data-src');
   const primaryColor = script?.getAttribute('data-color') || '#4e83fd';
 

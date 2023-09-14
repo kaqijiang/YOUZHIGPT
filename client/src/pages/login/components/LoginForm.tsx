@@ -60,17 +60,6 @@ const LoginForm = ({ setPageType, loginSuccess }: Props) => {
     [loginSuccess, toast]
   );
 
-  const onclickGit = useCallback(() => {
-    setLoginStore({
-      provider: 'git',
-      lastRoute
-    });
-    router.replace(
-      `https://github.com/login/oauth/authorize?client_id=${feConfigs?.gitLoginKey
-      }&redirect_uri=${`${location.origin}/login/provider`}&scope=user:email%20read:user`,
-      '_self'
-    );
-  }, [lastRoute, setLoginStore]);
 
   return (
     <>

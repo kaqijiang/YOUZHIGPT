@@ -237,7 +237,7 @@ const UserInfo = () => {
               cursor={'pointer'}
               userSelect={'none'}
               onClick={() => {
-                window.open(`https://doc.fastgpt.run/docs/intro`);
+                window.open(`https://nhrvt0kw31.feishu.cn/docx/RF1Kd8xYYotZRUxcVjHcaqTUn5a`);
               }}
             >
               <MyIcon name={'courseLight'} w={'18px'} />

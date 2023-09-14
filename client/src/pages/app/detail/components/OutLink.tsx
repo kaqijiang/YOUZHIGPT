@@ -75,9 +75,9 @@ const Share = ({ appId }: { appId: string }) => {
           size={['sm', 'md']}
           {...(shareChatList.length >= 10
             ? {
-                isDisabled: true,
-                title: '最多创建10组'
-              }
+              isDisabled: true,
+              title: '最多创建10组'
+            }
             : {})}
           onClick={() => setEditLinkData(defaultOutLinkForm)}
         >
@@ -156,7 +156,7 @@ const Share = ({ appId }: { appId: string }) => {
                         onClick={() => {
                           const url = `${location.origin}/chat/share?shareId=${item.shareId}`;
                           const src = `${location.origin}/js/iframe.js`;
-                          const script = `<script src="${src}" id="fastgpt-iframe" data-src="${url}" data-color="#4e83fd"></script>`;
+                          const script = `<script src="${src}" id="YouGPT-iframe" data-src="${url}" data-color="#4e83fd"></script>`;
                           copyData(script, '已复制嵌入 Script，可在应用 HTML 底部嵌入', 3000);
                         }}
                         py={[2, 3]}
@@ -282,7 +282,7 @@ export function EditLinkModal({
   return (
     <MyModal
       isOpen={true}
-      onClose={() => {}}
+      onClose={() => { }}
       title={isEdit ? titleMap.current.edit[type] : titleMap.current.create[type]}
     >
       <ModalBody>

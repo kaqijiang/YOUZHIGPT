@@ -22,7 +22,7 @@ const Navbar = ({ unread }: { unread: number }) => {
   const { t } = useTranslation();
   const router = useRouter();
   const { userInfo } = useUserStore();
-  const { gitStar } = useGlobalStore();
+  // const { gitStar } = useGlobalStore();
   const { lastChatAppId, lastChatId } = useChatStore();
   const navbarList = useMemo(
     () => [
@@ -173,7 +173,7 @@ const Navbar = ({ unread }: { unread: number }) => {
           mb={5}
           color={'#9096a5'}
           onClick={() => {
-            window.open(`https://j5qbu9fnwv.feishu.cn/docx/UXsQdoNVpoKePpx5l24cnPQHnah`);
+            window.open(`https://nhrvt0kw31.feishu.cn/docx/RF1Kd8xYYotZRUxcVjHcaqTUn5a`);
           }}
         >
           <MyIcon name={'assistance'} width={'20px'} height={'20px'} />
@@ -184,7 +184,7 @@ const Navbar = ({ unread }: { unread: number }) => {
 
       )}
       {/* <Language {...itemStyles} /> 多语言 */}
-      {feConfigs?.show_git && (
+      {/* {feConfigs?.show_git && (
         <MyTooltip label={`Git Star: ${gitStar}`} placement={'right-end'}>
           <Link
             as={NextLink}
@@ -197,7 +197,7 @@ const Navbar = ({ unread }: { unread: number }) => {
             <MyIcon name={'git'} width={'22px'} height={'22px'} />
           </Link>
         </MyTooltip>
-      )}
+      )} */}
     </Flex>
   );
 };

@@ -33,16 +33,16 @@ import { authOutLinkChat } from '@/service/support/outLink/auth';
 import requestIp from 'request-ip';
 
 export type MessageItemType = ChatCompletionRequestMessage & { dataId?: string };
-type FastGptWebChatProps = {
+type YouGPTWebChatProps = {
   chatId?: string; // undefined: nonuse history, '': new chat, 'xxxxx': use history
   appId?: string;
 };
-type FastGptShareChatProps = {
+type YouGPTShareChatProps = {
   shareId?: string;
 };
 export type Props = CreateChatCompletionRequest &
-  FastGptWebChatProps &
-  FastGptShareChatProps & {
+  YouGPTWebChatProps &
+  YouGPTShareChatProps & {
     messages: MessageItemType[];
     stream?: boolean;
     detail?: boolean;
@@ -93,9 +93,9 @@ export default withNextCors(async function handler(req: NextApiRequest, res: Nex
       authType
     } = await (shareId
       ? authOutLinkChat({
-          shareId,
-          ip: requestIp.getClientIp(req)
-        })
+        shareId,
+        ip: requestIp.getClientIp(req)
+      })
       : authUser({ req, authBalance: true }));
 
     if (!user) {
@@ -235,7 +235,7 @@ export default withNextCors(async function handler(req: NextApiRequest, res: Nex
       source: (() => {
         if (authType === 'apikey') return BillSourceEnum.api;
         if (shareId) return BillSourceEnum.shareLink;
-        return BillSourceEnum.fastgpt;
+        return BillSourceEnum.YouGPT;
       })(),
       response: responseData,
       shareId

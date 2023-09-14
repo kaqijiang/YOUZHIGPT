@@ -3,7 +3,7 @@ export enum OAuthEnum {
   google = 'google'
 }
 export enum BillSourceEnum {
-  fastgpt = 'fastgpt',
+  YouGPT = 'YouGPT',
   api = 'api',
   shareLink = 'shareLink'
 }
@@ -14,7 +14,7 @@ export enum PageTypeEnum {
 }
 
 export const BillSourceMap: Record<`${BillSourceEnum}`, string> = {
-  [BillSourceEnum.fastgpt]: 'YOUZHI 平台',
+  [BillSourceEnum.YouGPT]: 'YOUZHI 平台',
   [BillSourceEnum.api]: 'Api',
   [BillSourceEnum.shareLink]: '免登录链接'
 };
